@@ -4,18 +4,20 @@ from  __future__ import absolute_import
 from __future__ import print_function
 from ImageDataGeneratorCustom import ImageDataGeneratorCustom
 import numpy as np
+import tensorflow as tf 
 from keras.applications.vgg16 import VGG16
 from keras.layers import *
 from keras.models import Model, load_model
 from keras.optimizers import SGD
-from keras.preprocessing.image import load_img, img_to_array
-import tensorflow as tf
+from tensorflow.keras.preprocessing.image import load_img, img_to_array
+
 from keras import backend as K
 
-config = tf.ConfigProto()
+config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth=True
-sess = tf.Session(config=config)
+sess = tf.compat.v1.Session(config=config)
 K.set_session(sess)
+tf.compat.v1.disable_eager_execution()
 
 def convnet_model_():
     vgg_model = VGG16(weights=None, include_top=False)
@@ -69,17 +71,17 @@ class DataGenerator(object):
         self.idg = ImageDataGeneratorCustom(**params)
 
     def get_train_generator(self, batch_size):
-        return self.idg.flow_from_directory("./dataset/",
+        return self.idg.flow_from_directory("/mnt/e/img_fev_juillet/img_rectangle/dataset_deepranking/",
                                             batch_size=batch_size,
                                             target_size=self.target_size,shuffle=False,
-                                            triplet_path  ='./triplet_5033.txt'
+                                            triplet_path  ='/mnt/e/img_fev_juillet/img_rectangle/triplet_text/triplets.txt'
                                            )
 
     def get_test_generator(self, batch_size):
-        return self.idg.flow_from_directory("./dataset/",
+        return self.idg.flow_from_directory("/mnt/e/img_fev_juillet/img_rectangle/dataset_deepranking/",
                                             batch_size=batch_size,
                                             target_size=self.target_size, shuffle=False,
-                                            triplet_path  ='./triplet_5033.txt'
+                                            triplet_path  ='/mnt/e/img_fev_juillet/img_rectangle/triplet_text/triplets.txt'
                                         )
 
 

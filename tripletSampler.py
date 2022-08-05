@@ -9,8 +9,8 @@ import numpy as np
 
 def list_pictures(directory, ext='jpg|jpeg|bmp|png|ppm'):
     return [os.path.join(root, f)
-            for root, _, files in os.walk(directory) for f in files
-            if re.match(r'([\w]+\.(?:' + ext + '))', f)]
+            for root, _, files in os.walk(directory) for f in files]
+            #if re.match(r'([\w]+\.(?:' + ext + '))', f)]
 
 
 def get_negative_images(all_images,image_names,num_neg_images):
@@ -51,6 +51,7 @@ def triplet_sampler(directory_path, output_path,num_neg_images,num_pos_images):
     triplets = []
     for class_ in classes:
         image_names = list_pictures(os.path.join(directory_path,class_))
+        print("nb img dans classe",len(image_names))
         for image_name in image_names:
             image_names_set = set(image_names)
             query_image = image_name
@@ -61,7 +62,7 @@ def triplet_sampler(directory_path, output_path,num_neg_images,num_pos_images):
                     triplets.append(query_image+',')
                     triplets.append(positive_image+',')
                     triplets.append(negative_image+'\n')
-            
+    #print("nb triplets ds liste:",len(triplets))
     f = open(os.path.join(output_path,"triplets.txt"),'w')
     f.write("".join(triplets))
     f.close()
@@ -107,7 +108,7 @@ if __name__ == '__main__':
             quit()
 
     if not os.path.exists(args.output_directory):
-            print (args.input_directory+" path does not exist!")
+            print (args.output_directory+" path does not exist!")
             quit()
 
     print ("Input Directory: "+args.input_directory)
