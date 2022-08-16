@@ -20,7 +20,7 @@ K.set_session(sess)
 tf.compat.v1.disable_eager_execution()
 
 def convnet_model_():
-    vgg_model = VGG16(weights=None, include_top=False)
+    vgg_model = VGG16(weights='imagenet', include_top=False)
     x = vgg_model.output
     x = GlobalAveragePooling2D()(x)
     x = Dense(4096, activation='relu')(x)
@@ -121,12 +121,12 @@ def _loss_tensor(y_true, y_pred):
     return tf.maximum(loss,zero)
 
 #deep_rank_model.load_weights('deepranking.h5')
-deep_rank_model.compile(loss=_loss_tensor, optimizer=SGD(lr=0.001, momentum=0.9, nesterov=True))
+deep_rank_model.compile(loss=_loss_tensor, optimizer=SGD(learning_rate=0.0001, momentum=0.9, nesterov=True))
 
 
 train_steps_per_epoch = int((15099)/batch_size)
 train_epocs = 25
-deep_rank_model.fit_generator(train_generator,
+deep_rank_model.fit(train_generator,
                         steps_per_epoch=train_steps_per_epoch,
                         epochs=train_epocs
                         )

@@ -42,7 +42,7 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Embedding
 
 def convnet_model_():
-    vgg_model = VGG16(weights=None, include_top=False)
+    vgg_model = VGG16(weights='imagenet', include_top=True)
     x = vgg_model.output
     x = GlobalAveragePooling2D()(x)
     x = Dense(4096, activation='relu')(x)
